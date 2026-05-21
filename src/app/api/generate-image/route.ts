@@ -3,13 +3,14 @@ import { NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
 
-const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GENERATIVE_AI_API_KEY || "");
+const apiKey = process.env.GOOGLE_GENERATIVE_AI_API_KEY || process.env.VITE_GOOGLE_AI_API_KEY || process.env.GOOGLE_AI_API_KEY || "";
+const genAI = new GoogleGenerativeAI(apiKey);
 
 export async function POST(req: Request) {
   try {
     const { prompt, cardId } = await req.json();
 
-    if (!process.env.GOOGLE_GENERATIVE_AI_API_KEY) {
+    if (!apiKey) {
       return NextResponse.json(
         { error: "API Key não configurada." },
         { status: 500 }
